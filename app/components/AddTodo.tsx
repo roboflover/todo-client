@@ -25,22 +25,18 @@ const AddTodo: React.FC<AddTodoProps> = ({ onTodoAdded }) => {
     setError(null);
     setUploadProgress(null);
     setSuccessMessage(null);
-
+  
     if (!selectedFile) {
       setError('Пожалуйста, выберите изображение');
       return;
     }
-
-    const formFile = new FormData();
-    formFile.append('file', selectedFile);
-
-    const formTitle = {
-      title: selectedTitle,
-    };
-
+  
+    const formData = new FormData();
+    formData.append('file', selectedFile); // Ключ 'file' для файла
+    formData.append('title', selectedTitle); // Ключ 'title' для заголовка
+  
     try {
-      // Загрузка файла на сервер
-      const uploadResponse = await axios.put('http://localhost:3005/upload', formFile, {
+      await axios.post('http://localhost:3005/todos/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -51,16 +47,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ onTodoAdded }) => {
           }
         },
       });
-
-      const imageUrl = uploadResponse.data.url; // Получаем URL из ответа сервера
-
-      // Создание задания с URL изображения
-      await axios.post('http://localhost:3005/todos', { ...formTitle, imageUrl }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+  
       setSelectedFile(null);
       setUploadProgress(null);
       setSuccessMessage('Задание успешно добавлено');
@@ -73,7 +60,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ onTodoAdded }) => {
       setError('Ошибка при добавлении задания или загрузке изображения');
     }
   };
-
+  
   return (
     <div className="mb-4">
       <form onSubmit={handleSubmit} className="flex flex-col space-y-2">

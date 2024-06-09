@@ -26,6 +26,13 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onToggleComplete, onDelete }
                 {todo.description}
               </span>
             )}
+            {todo.imageUrl && (
+              <img
+                src={todo.imageUrl}
+                alt={todo.title}
+                className="mt-2 max-w-full h-auto rounded"
+              />
+            )}
           </div>
           <div className="flex space-x-2">
             <button

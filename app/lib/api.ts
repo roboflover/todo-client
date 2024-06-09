@@ -9,6 +9,7 @@ export interface Todo {
   title: string;
   description: string,
   isCompleted: boolean;
+  imageUrl: string;
 }
 
 export const getTodos = async (): Promise<Todo[]> => {
